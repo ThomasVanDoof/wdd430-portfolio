@@ -18,6 +18,16 @@ export default function Header() {
               About
             </Link>
           </li>
+          <li>
+            <Link href="/projects" className="hover:underline">
+              Projects
+            </Link>
+          </li>
+          <li>
+            <Link href="/contacts" className="hover:underline">
+              Contacts
+            </Link>
+          </li>
         </ul>
       </nav>
     </header>
