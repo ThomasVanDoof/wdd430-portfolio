@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import { getProjectById } from "@/lib/projects-db";
 
 export async function GET(
@@ -8,14 +9,14 @@ export async function GET(
   const projectId = Number(id);
 
   if (!Number.isInteger(projectId) || projectId < 1) {
-    return Response.json({ error: "Invalid project id" }, { status: 400 });
+    return NextResponse.json({ error: "Invalid project id" }, { status: 400 });
   }
 
-  const project = getProjectById(projectId);
+  const project = await getProjectById(projectId);
 
   if (!project) {
-    return Response.json({ error: "Project not found" }, { status: 404 });
+    return NextResponse.json({ error: "Project not found" }, { status: 404 });
   }
 
-  return Response.json(project);
+  return NextResponse.json(project);
 }
