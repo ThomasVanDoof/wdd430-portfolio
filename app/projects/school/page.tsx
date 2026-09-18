@@ -1,27 +1,29 @@
-"use client";
+import { Suspense } from "react";
+import SchoolProjectList from "./SchoolProjectList";
 
-import { useEffect, useState } from "react";
-import ProjectList from "@/components/ProjectList";
-import type { Project } from "@/lib/projects-db";
+function SchoolProjectListSkeleton() {
+	return (
+		<section className="container mx-auto space-y-4 p-4" aria-busy="true" aria-label="Loading school projects">
+			{[1, 2, 3].map((item) => (
+				<article key={item} className="animate-pulse rounded bg-gray-100 p-4 shadow-md">
+					<div className="mb-3 h-7 w-2/5 rounded bg-gray-300" />
+					<div className="mb-2 h-4 w-full rounded bg-gray-300" />
+					<div className="mb-2 h-4 w-4/5 rounded bg-gray-300" />
+					<div className="mb-2 h-4 w-3/5 rounded bg-gray-300" />
+					<div className="mt-4 h-5 w-1/4 rounded bg-gray-300" />
+				</article>
+			))}
+		</section>
+	);
+}
 
 export default function SchoolProjects() {
-	const [projects, setProjects] = useState<Project[]>([]);
-	const [error, setError] = useState<string | null>(null);
-
-	useEffect(() => {
-		fetch("/api/projects?type=school")
-			.then((response) => {
-				if (!response.ok) throw new Error("Unable to load school projects.");
-				return response.json();
-			})
-			.then(setProjects)
-			.catch((fetchError: Error) => setError(fetchError.message));
-	}, []);
-
 	return (
 		<main className="container mx-auto px-4 py-12">
 			<h1 className="text-4xl font-bold">School Projects</h1>
-			{error ? <p className="mt-6 text-red-600">{error}</p> : <ProjectList projects={projects} />}
+			<Suspense fallback={<SchoolProjectListSkeleton />}>
+				<SchoolProjectList />
+			</Suspense>
 		</main>
 	);
 }
